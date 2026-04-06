@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rigging The Alphabet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="workspace" class="workspace">
+        
+        <div class="panel top-left">
+            <h1 class="logo">Rigging The Alphabet</h1>
+            <ul class="layer-list">
+                <li>
+                    <span class="layer-label" data-visible="true" data-layer="base">Base</span>
+                    <input type="color" class="color-picker" data-layer="base" value="#000000">
+                </li>
+                <li>
+                    <span class="layer-label" data-visible="true" data-layer="fills">Fills</span>
+                    <input type="color" class="color-picker" data-layer="fills" value="#00ff00">
+                </li>
+                <li>
+                    <span class="layer-label" data-visible="true" data-layer="joint">Joint</span>
+                    <input type="color" class="color-picker" data-layer="joint" value="#ff0000">
+                </li>
+                <li>
+                    <span class="layer-label" data-visible="true" data-layer="weight">Skin Weight</span>
+                    <input type="color" class="color-picker" data-layer="weight" value="#0000ff">
+                </li>
+                <li>
+                    <span class="layer-label" data-visible="true" data-layer="skeleton">Skeleton</span>
+                    <input type="color" class="color-picker" data-layer="skeleton" value="#ff00ff">
+                </li>
+            </ul>
+            <div class="action-buttons">
+                <button id="btnXray" class="ui-btn" data-selected="false">X-ray</button>
+                <button id="btnPackage" class="ui-btn" data-selected="false">package</button>
+            </div>
+        </div>
+
+        <div class="center-display">
+            <input type="text" id="textInput" value="Hidding Font" placeholder="Type here...">
+            
+            <div class="render-area" id="renderArea">
+                <div class="svg-container" id="normalContainer">
+                    <div class="font-layer layer-base" data-type="base" style="color: #000000;"></div>
+                    <div class="font-layer layer-fills" data-type="fills" style="color: #00ff00;"></div>
+                    <div class="font-layer layer-joint" data-type="joint" style="color: #ff0000;"></div>
+                    <div class="font-layer layer-weight" data-type="weight" style="color: #0000ff;"></div>
+                    <div class="font-layer layer-skeleton" data-type="skeleton" style="color: #ff00ff;"></div>
+                </div>
+
+                <div class="svg-container xray-mask-container" id="xrayContainer">
+                    <div class="font-layer layer-base" data-type="base" style="color: #000000;"></div>
+                    <div class="font-layer layer-fills" data-type="fills" style="color: #00ff00;"></div>
+                    <div class="font-layer layer-joint" data-type="joint" style="color: #ff0000;"></div>
+                    <div class="font-layer layer-weight" data-type="weight" style="color: #0000ff;"></div>
+                    <div class="font-layer layer-skeleton" data-type="skeleton" style="color: #ff00ff;"></div>
+                </div>
+
+                <div id="xrayLens" class="xray-lens">
+                    <div class="lens-header">SCANNER</div>
+                    <div class="lens-resize" id="lensResize"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel bottom-left">
+            <div class="mode-buttons">
+                <button class="ui-btn mode-btn" data-selected="true">Moving</button>
+                <button class="ui-btn mode-btn" data-selected="false">Bone</button>
+            </div>
+            <div class="slider-group">
+                <input type="range" id="speedSlider" min="0" max="100" value="30">
+                <div class="slider-labels"><span>slow</span><span>fast</span></div>
+            </div>
+        </div>
+        <div class="panel bottom-right">
+            <div class="slider-group">
+                <span class="slider-title">size</span>
+                <input type="range" id="sizeSlider" min="20" max="150" value="80">
+                <div class="slider-labels"><span>small</span><span>big</span></div>
+            </div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

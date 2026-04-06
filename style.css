@@ -1,0 +1,109 @@
+body, html { margin: 0; padding: 0; height: 100%; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; overflow: hidden; background-color: #ffffff; color: #000000; }
+.workspace { width: 100vw; height: 100vh; position: relative; transition: all 0.3s ease; }
+
+/* 패널 UI 설정 */
+.panel { position: absolute; z-index: 10; }
+.top-left { top: 20px; left: 20px; }
+.bottom-left { bottom: 20px; left: 20px; }
+.bottom-right { bottom: 20px; right: 20px; }
+.logo { font-size: 24px; margin: 0 0 15px 0; font-family: monospace; }
+
+/* 버튼 및 리스트 */
+.layer-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
+.layer-list li { display: flex; align-items: center; margin-bottom: 8px; }
+.layer-label { padding: 4px 8px; cursor: pointer; font-size: 16px; user-select: none; transition: 0.2s; }
+.layer-label:hover { background-color: #000000; color: #ffffff; }
+.layer-label[data-visible="false"] { opacity: 0.3; text-decoration: line-through; }
+.color-picker { width: 18px; height: 18px; margin-left: 10px; cursor: pointer; border: 1px solid #ccc; }
+
+.action-buttons, .mode-buttons { display: flex; gap: 5px; margin-bottom: 15px; }
+.ui-btn { background: transparent; border: 1px solid currentColor; color: inherit; padding: 6px 12px; cursor: pointer; font-family: inherit; font-size: 14px; transition: 0.2s; }
+.ui-btn:hover { background-color: #000000; color: #ffffff; }
+.ui-btn[data-selected="true"] { font-weight: bold; border-width: 2px; }
+
+/* 슬라이더 */
+.slider-group { display: flex; flex-direction: column; width: 150px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 12px; }
+.slider-title { font-size: 12px; margin-bottom: 5px; }
+
+/* 중앙 디스플레이 */
+.center-display { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 80vw; height: 60vh; }
+#textInput { background: transparent; border: none; outline: none; text-align: center; font-size: 16px; margin-bottom: 20px; color: inherit; border-bottom: 1px dashed currentColor; width: 300px; transition: 0.3s; }
+.render-area { position: relative; width: 100%; height: 100%; font-size: 80px; }
+
+/* 서체 레이어 정렬 */
+.svg-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.font-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transition: opacity 0.2s; }
+
+/* [추가 1] Base 레이어가 무조건 최상단에 겹치도록 z-index 설정 */
+.layer-base { z-index: 10; }
+
+.char-svg { display: inline-block; width: 1em; height: 1.5em; background-color: currentColor; -webkit-mask-size: contain; -webkit-mask-repeat: no-repeat; -webkit-mask-position: center; mask-size: contain; mask-repeat: no-repeat; mask-position: center; }
+.char-space { width: 0.5em; }
+
+/* Package 모드 */
+.workspace.is-packaged #normalContainer .font-layer:not(.layer-base) { opacity: 0 !important; }
+
+/* X-ray 스캐너 로직 */
+.xray-mask-container { display: none; }
+.workspace.is-xray .xray-mask-container { display: block; }
+
+.xray-lens {
+    position: absolute; width: 300px; height: 150px;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    border: 2px solid #000000; background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 0 9999px rgba(255,255,255, 0.4);
+    cursor: grab; display: none; pointer-events: auto;
+}
+.workspace.is-xray .xray-lens { display: block; }
+.xray-lens:active { cursor: grabbing; }
+
+.lens-header { background: #000000; color: #ffffff; font-size: 10px; font-weight: bold; padding: 2px 5px; text-align: left; user-select: none; }
+
+/* [추가 3] 크기 조절 손잡이 (우측 하단) */
+.lens-resize {
+    position: absolute; bottom: 0; right: 0; width: 20px; height: 20px;
+    cursor: se-resize; z-index: 20;
+}
+.lens-resize::after {
+    content: ''; position: absolute; bottom: 3px; right: 3px;
+    width: 10px; height: 10px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+}
+
+
+/* =========================================
+   [추가 2] 다크 테마 (색상 반전) 로직
+   ========================================= */
+.workspace.theme-dark {
+    background-color: #000000; color: #ffffff;
+}
+
+/* 다크 테마일 때의 UI 색상 반전 처리 */
+.workspace.theme-dark .layer-label:hover,
+.workspace.theme-dark .ui-btn:hover { background-color: #ffffff; color: #000000; }
+
+.workspace.theme-dark .xray-lens {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 9999px rgba(0,0,0, 0.8); /* 배경을 어둡게 */
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.workspace.theme-dark .lens-header { background: #ffffff; color: #000000; }
+
+/* =========================================
+   [수정됨] 패키지/X-ray 모드에서 스캐너 외부의 Base 폰트만 강제 표시
+   ========================================= */
+/* 1. 일단 배경이 어두워지면 Base 폰트를 흰색으로 강제 표시합니다 */
+.workspace.is-packaged .render-area .font-layer.layer-base,
+.workspace.theme-dark .render-area .font-layer.layer-base {
+    opacity: 1 !important;
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+/* 2. 하지만 스캐너(.xray-lens) 내부에 있는 폰트들은 이 강제 규칙을 무시합니다 */
+.workspace .xray-lens .font-layer.layer-base {
+    /* JS가 제어하는 체크박스 상태(투명도)와 컬러 피커 색상을 그대로 따르도록 덮어쓰기 해제 */
+    opacity: 1 !important; 
+    color: inherit !important;
+    fill: inherit !important;
+}
